@@ -1,6 +1,6 @@
 # Apply method in Functions
 
-## What is it and what does it do?
+### ***What is it and what does it do?***
 Apply method applies some context to the function. Similar to how classes have this keyword.
 
 ```
