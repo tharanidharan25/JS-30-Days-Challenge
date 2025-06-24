@@ -1,13 +1,25 @@
+// var curry = function(fn) {
+//     let nums = []
+//     return function curried(...args) {
+//         nums = [...nums, ...args]
+//         if (fn.length === nums.length) {
+//             const res = fn(...nums)
+//             nums = []
+//             return res
+//         } else {
+//             return curried
+//         }
+//     }
+// }
+
 var curry = function(fn) {
-    let nums = []
     return function curried(...args) {
-        nums = [...nums, ...args]
-        if (fn.length === nums.length) {
-            const res = fn(...nums)
-            nums = []
-            return res
+        if (args.length === fn.length) {
+            return fn(...args)
         } else {
-            return curried
+            return function(...newArgs) {
+                return curried(...args, ...newArgs)
+            }
         }
     }
 }
