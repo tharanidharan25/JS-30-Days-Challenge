@@ -27,7 +27,7 @@ let areDeepEqual = function(o1, o2) {
         }
 
         for (const key in o1) {
-            if (!areDeepEqual(o1[key], o2[key])) {
+            if (!(key in o2) || !areDeepEqual(o1[key], o2[key])) {
                 return false
             }
         }
@@ -41,3 +41,8 @@ console.log(areDeepEqual({"y":2,"x":1}, {"x":1,"y":2}))
 console.log(areDeepEqual({"x":null,"L":[1,2,3]}, {"x":null,"L":["1","2","3"]}))
 console.log(areDeepEqual(null, {}))
 console.log(areDeepEqual('a', {}))
+console.log(areDeepEqual({
+    '1': undefined
+}, {
+    '2': undefined
+}))
