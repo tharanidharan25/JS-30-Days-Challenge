@@ -1,24 +1,47 @@
 class EventEmitter {
-    constructor() {
-        this.allEvents = {}
-    }
+    // Solution 1
+    // constructor () {
+    //     this.allEvents = {}
+    // }
+
+    // Solution 2
+    eventMap = {}
     /**
      * @param {string} eventName
      * @param {Function} callback
      * @return {Object}
      */
     subscribe(eventName, callback) {
-        if (!this.allEvents.hasOwnProperty(eventName)) {
-            this.allEvents[eventName] = []
+        
+        // Solution 1
+        // if (!this.allEvents.hasOwnProperty(eventName)) {
+        //     this.allEvents[eventName] = []
+        // }
+        // this.allEvents[eventName].push(callback)
+        // const index = this.allEvents[eventName].length - 1
+        // return {
+        //     unsubscribe: () => {
+        //         this.allEvents[eventName][index] = undefined
+        //         return undefined
+        //     }
+        // };
+        
+        // Solution 2
+        if (!this.eventMap.hasOwnProperty(eventName)) {
+            this.eventMap[eventName] = new Set()
         }
-        this.allEvents[eventName].push(callback)
-        const index = this.allEvents[eventName].length - 1
+        this.eventMap[eventName].add(callback) 
+
         return {
             unsubscribe: () => {
-                this.allEvents[eventName][index] = undefined
-                return undefined
+                // Solution 1
+                // this.allEvents[eventName][index] = undefined
+                // return undefined
+
+                // Solution 2
+                this.eventMap[eventName].delete(callback)
             }
-        };
+        }
     }
     
     /**
@@ -27,16 +50,26 @@ class EventEmitter {
      * @return {Array}
      */
     emit(eventName, args = []) {
-        if (!this.allEvents.hasOwnProperty(eventName)) {
+
+        // Solution1
+        // if (!this.allEvents.hasOwnProperty(eventName)) {
+        //     return []
+        // }
+        // const callbacks = this.allEvents[eventName]
+        // const res = []
+        // for (const eachCall of callbacks) {
+        //     if (eachCall) {
+        //         res.push(eachCall(...args))
+        //     }
+        // }
+        // return res
+
+        // Solution 2
+        if (!this.eventMap.hasOwnProperty(eventName)) {
             return []
         }
-        const callbacks = this.allEvents[eventName]
         const res = []
-        for (const eachCall of callbacks) {
-            if (eachCall) {
-                res.push(eachCall(...args))
-            }
-        }
+        this.eventMap[eventName].forEach((cb) => res.push(cb(...args)))
         return res
     }
 }
